@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cibertec.entity.Trabajador;
@@ -32,6 +33,24 @@ public class TrabajadorController {
 	public ResponseEntity<List<Trabajador>> lista(){
 		log.info(">>> lista ");
 		return ResponseEntity.ok(service.listaTrabajador());
+	}
+	
+	@GetMapping("/porId/{id}")
+	@ResponseBody
+	public ResponseEntity<Trabajador> listaPorId(@PathVariable("id")int idTrabajador){
+		Optional <Trabajador> optTrabajador = service.obtienePorId(idTrabajador);
+		if(optTrabajador.isPresent()) {
+			return ResponseEntity.ok(optTrabajador.get());
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping("/porRuc/{ruc}")
+	@ResponseBody
+	public ResponseEntity<List<Trabajador>> listaPorRuc(@PathVariable("ruc")String ruc){
+		List<Trabajador> lista = service.listaPorRuc(ruc);
+		return ResponseEntity.ok(lista);
 	}
 	
 	@PostMapping
